@@ -1,30 +1,3 @@
-<!DOCTYPE html>
-<head>
-  <meta charset="utf-8">
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <style>
-    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
-
-    .polygon {
-      fill: blue;
-    }
-
-    .small_arc {
-      fill: brown
-    }
-
-    .bases {
-      fill: #e5d3ae
-    }
-    .bases:hover {
-    fill: #f15b24;
-}
-
-  </style>
-</head>
-
-<body><script>
-  //Adapted from https://bl.ocks.org/lwthatcher/5456840f796632c27edc813ce8ab4719
 
   //Viz space
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
@@ -164,6 +137,3 @@ svg.append('path')
   svg.append("circle").attr("r", 10).attr("cx", x(70)).attr("cy", y(30)).attr('class', 'bases');
   svg.append("circle").attr("r", 10).attr("cx", x(50)).attr("cy", y(50)).attr('class', 'bases');
   svg.append("circle").attr("r", 10).attr("cx", x(50)).attr("cy", y(10)).attr('class', 'bases');
-
-
-</script></body>
