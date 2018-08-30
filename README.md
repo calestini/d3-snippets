@@ -6,3 +6,7 @@ Re-usable d3.js v4 visualizations
 ## Baseball Field
 
 ![Baseball Field](images/baseball_field.png)
+
+## Baseball Field with Voronoi Grid
+
+![Baseball Field](images/baseball-field-voronoi.png)
