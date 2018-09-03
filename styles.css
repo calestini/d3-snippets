@@ -22,3 +22,13 @@ fill: #f15b24;
 .fieldLocation:hover {
 fill: #f15b24;
 }
+
+.bordered {
+        stroke: #fff;
+        stroke-width:2px;
+      }
+
+.bordered:hover{
+  stroke: #363e4f;
+  stroke-width:4px;
+}
