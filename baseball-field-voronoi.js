@@ -149,7 +149,7 @@ function createHitMap(diamondAngle, radiuses){
   return locations_dic;
 };
 
-locations = createHitMap(45, radiuses);
+locations = createHitMap(40, radiuses);
 
 
 var angles = [56.25, 67.50, 78.75, 90, 101.25, 112.50, 123.75, 135];
@@ -180,14 +180,14 @@ svg.data([diamond]).append("polygon")
       }).join(" ");
   }).attr('fill','#b7a15f');
 
-
+/*
 svg.selectAll("circle")
     .data(locations).enter()
     .append("circle")
     .attr("cx", function(d){ return xScale(d.x);})
     .attr("cy", function(d){ return yScale(d.y);})
     .attr("r", 5)
-
+*/
 
   svg.append("circle").attr("r", 10).attr("cx", xScale(50)).attr("cy", yScale(2)).attr('class', 'bases');
   svg.append("circle").attr("r", 10).attr("cx", xScale(32)).attr("cy", yScale(20)).attr('class', 'bases');
@@ -202,10 +202,10 @@ svg.selectAll("path")
   .append("path")
   .attr("d", function(d) { return "M" + d.join(",") + "Z"; })
   .attr('fill', 'transparent')
-  .attr('stroke','black')
+  .attr('stroke','grey')
   .attr('class', 'fieldLocation')
 
-
+/*
 svg.data([left_triangle])
 .append("polygon")
   .attr("points",function(d) {
@@ -253,3 +253,4 @@ svg.data([trapezius])
         })
     })
     .attr('fill', 'white');
+*/
