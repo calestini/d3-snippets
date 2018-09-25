@@ -1,18 +1,9 @@
 ///Initializer variables
-const margin = {top: 30, right: 20, bottom: 30, left:50};
+const margin = {top: 50, right: 20, bottom: 30, left:50};
 const width = 800 - margin.left - margin.right;
 const  height = 800 - margin.top - margin.bottom;
 const  padding = 1;
 
-//y values
-var xValue = function(d){return +d.launch_speed};
-var xScale = d3.scaleLinear().range([0, width]).nice();
-var xAxis = d3.axisBottom(xScale);
-
-//x values
-var yValue = function(d){return +d.launch_angle};
-var yScale = d3.scaleLinear().range([height, 0]).nice();
-var yAxis = d3.axisLeft(yScale);
 
 //color scale
 var colores = d3.scaleLinear()
@@ -26,15 +17,29 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom);
 
 //read csv and render elements
-d3.csv('boston__batting_2018.csv', function(error, data){
+d3.csv('boston__pitching_2018.csv', function(error, data){
 
    data.forEach(function(d){
             d.launch_angle = +d.launch_angle;
             d.launch_speed = +d.launch_speed;
+						d.launch_angle_bin = +d.launch_angle_bin;
+            d.launch_speed_bin = +d.launch_speed_bin;
 						d.estimated_ba_using_speedangle = +d.estimated_ba_using_speedangle;
 						d.hc_x = d.hc_x;
 						d.hc_y = d.hc_y;
    })
+
+
+	 //y values
+	 var xValue = function(d){return +d.launch_speed};
+	 var xScale = d3.scaleLinear().range([0, width]).nice();
+	 var xAxis = d3.axisBottom(xScale);
+
+	 //x values
+	 var yValue = function(d){return +d.launch_angle};
+	 var yScale = d3.scaleLinear().range([height, 0]).nice();
+	 var yAxis = d3.axisLeft(yScale);
+
 
    xScale.domain([0, 120]).clamp(true);
    yScale.domain([-70, 70]).clamp(true);
@@ -44,6 +49,33 @@ d3.csv('boston__batting_2018.csv', function(error, data){
 
 	 var g = svg.append("g")
  	     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	 //create a voronoi split of the screen
+ 	var voronoi = d3.voronoi()
+ 		.x(function(d) { return (d.launch_speed_bin-1)*40+20; })
+ 		.y(function(d) { return (d.launch_angle_bin-1)*40+20; })
+ 		.extent([[0, 0], [width, height]]);
+
+ 	var locations_dic = [];
+
+ 	for (var i = 0; i < width/20; ++i){
+ 		for (var j=0; j < height/20; ++j){
+ 			locations_dic.push({
+ 			 "x": 20*i,"y": 20*j
+ 			})
+ 		}
+ 	};
+
+ 	var voronoiMap = voronoi.polygons(data);
+
+ 	g.selectAll("path")
+ 		.data(voronoiMap)
+ 		.enter()
+ 		.append("path")
+ 		.attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
+ 		.attr('fill', 'transparent')
+ 		.attr('stroke','grey')
+ 		.attr('class', 'fieldLocation')
 
 	 ////   inserting axis in the outside space
 	 //x axis
@@ -60,8 +92,8 @@ d3.csv('boston__batting_2018.csv', function(error, data){
 
 	g.append("text")
 				.attr("class", "label")
-				.attr("x", height)
-				.attr("y", width)
+				.attr("x", width)
+				.attr("y", height-10)
 				.style("text-anchor", "end")
 				.text("Exit Velocity (mph)")
 				.style('fill', 'grey')
@@ -96,6 +128,7 @@ d3.csv('boston__batting_2018.csv', function(error, data){
 		.attr('font-size', 16)
 
 		//datapoints
+
 	 g.selectAll('.pitch')
 		 .data(data)
 		 .enter()
@@ -112,4 +145,17 @@ d3.csv('boston__batting_2018.csv', function(error, data){
 		 .attr('cy', function(d){return yScale(yValue(d));})
 		 .style('opacity','0.2')
 		 .style('fill', function(d){return colores(d.estimated_ba_using_speedangle)})
+
+	 svg.append("text")
+		.attr("class", "label")
+		.attr("x", width/2)
+		.attr("y", margin.top /2)
+		.style("text-anchor", "center")
+		.text("Hit Probability (Boston Red Sox)")
+		.style('fill', 'grey')
+		.attr('font-family', 'Helvetica')
+		.attr('font-style', 'strong')
+		.attr('font-size', 16)
+
+
 });
